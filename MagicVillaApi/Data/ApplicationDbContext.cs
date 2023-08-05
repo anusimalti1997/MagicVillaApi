@@ -1,4 +1,5 @@
-﻿using MagicVillaApi.Models.Villa;
+﻿using MagicVillaApi.Models.Users;
+using MagicVillaApi.Models.Villa;
 using MagicVillaApi.Models.VillaNumber;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,7 @@ namespace MagicVillaApi.Data
         {
             
         }
+        public DbSet<LocalUser> LocalUsers { get; set; }
         public DbSet<Villa> Villas { get; set; }
         public DbSet<VillaNumber> VillaNumbers { get; set; }
 
