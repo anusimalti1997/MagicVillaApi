@@ -5,6 +5,7 @@ using MagicVillaApi.Models.Response;
 using MagicVillaApi.Models.Villa;
 using MagicVillaApi.Models.Villa.Dto;
 using MagicVillaApi.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,8 @@ namespace MagicVillaApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+    //[Authorize(Roles = "admin")]
     public class VillaApiController : ControllerBase
     {
         protected ApiResponse _response;
@@ -32,6 +35,8 @@ namespace MagicVillaApi.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK,Type =typeof(VillaDTO))]
         public async Task<ActionResult<ApiResponse>> GetVillas()
         {
@@ -66,6 +71,8 @@ namespace MagicVillaApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<ApiResponse>> GetVilla(int id)
         {
             try
@@ -100,6 +107,8 @@ namespace MagicVillaApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<ApiResponse>> CreateVilla([FromBody] VillaCreateDTO villa)
         {
             try
@@ -160,6 +169,8 @@ namespace MagicVillaApi.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<ApiResponse>> DeleteVilla(int id)
         {
             try
@@ -196,6 +207,8 @@ namespace MagicVillaApi.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<ApiResponse>> UpdateVilla(int id,[FromBody] VillaUpdateDTO villaDto)
         {
             try
@@ -256,6 +269,8 @@ namespace MagicVillaApi.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<ApiResponse>>  UpdatePartialVilla(int id , JsonPatchDocument<VillaUpdateDTO> patchDto)
         {
             try
