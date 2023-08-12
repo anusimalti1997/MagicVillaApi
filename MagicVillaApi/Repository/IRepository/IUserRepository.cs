@@ -1,4 +1,5 @@
-﻿using MagicVillaApi.Models.Users;
+﻿using MagicVillaApi.Models.ApplicationUser;
+using MagicVillaApi.Models.Users;
 
 namespace MagicVillaApi.Repository.IRepository
 {
@@ -6,6 +7,6 @@ namespace MagicVillaApi.Repository.IRepository
     {
         Task<bool> IsUniqueUser(string userName);
         Task<LoginResponseDTO> Login(LoginRequestDTO loginRequestDTO);
-        Task<LocalUser> Register(RegistrationRequestDTO registerRequestDTO);
+        Task<UserDTO> Register(RegistrationRequestDTO registerRequestDTO);
     }
 }

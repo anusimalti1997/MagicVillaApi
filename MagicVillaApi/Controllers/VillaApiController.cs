@@ -14,9 +14,11 @@ using System.Reflection.Metadata.Ecma335;
 
 namespace MagicVillaApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    [Authorize]
+    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
+    //[Authorize]
     //[Authorize(Roles = "admin")]
     public class VillaApiController : ControllerBase
     {
@@ -34,6 +36,7 @@ namespace MagicVillaApi.Controllers
         }
 
         [HttpGet]
+        [MapToApiVersion("1.0")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -100,6 +103,7 @@ namespace MagicVillaApi.Controllers
                 _response.ErrorMessages = new List<string> { ex.Message };
                 _response.IsSuccess = false;
             }
+          
             return _response;
         }
 
