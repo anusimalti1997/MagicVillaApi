@@ -62,6 +62,7 @@ namespace MagicVillaApi.Controllers
 
             _response.StatusCode = HttpStatusCode.OK;
             _response.IsSuccess = true;
+            _response.Result = user;
             return Ok(_response);
 
         }

@@ -13,6 +13,10 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+
+
+
 // Add services to the container.
 
 builder.Services.AddDbContext<ApplicationDbContext>(option =>{
@@ -35,10 +39,10 @@ builder.Services.AddApiVersioning(options =>
     options.DefaultApiVersion = new ApiVersion(1, 0);
 });
 
-builder.Services.AddVersionedApiExplorer(options =>
-{
-    options.GroupNameFormat = "'v'VVV";
-});
+//builder.Services.AddVersionedApiExplorer(options =>
+//{
+//    options.GroupNameFormat = "'v'VVV";
+//});
 
 
 
@@ -75,6 +79,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<ILogging,Logging>();
 
 var app = builder.Build();
+
+app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200"));
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

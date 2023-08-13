@@ -6,6 +6,8 @@ using MagicVillaApi.Repository.IRepository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Linq;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -106,14 +108,38 @@ namespace MagicVillaApi.Repository
                     await _userManager.AddToRoleAsync(user, "admin");
                     var userToReturn = await _db.ApplicationUsers.FirstOrDefaultAsync(x=>x.UserName==registerRequestDTO.UserName);
 
-                   return _mapper.Map<UserDTO>(userToReturn);
+                    //return _mapper.Map<UserDTO>(userToReturn);
+
+                    // if found then generate jwt token
+                    var roles = await _userManager.GetRolesAsync(user);
+                    var tokenHandler = new JwtSecurityTokenHandler();
+                    var key = Encoding.ASCII.GetBytes(secretKey);
+                    var tokenDescriptor = new SecurityTokenDescriptor
+                    {
+                        Subject = new ClaimsIdentity(new Claim[]
+                        {
+                    new Claim(ClaimTypes.Name,user.Id.ToString()),
+                    new Claim(ClaimTypes.Role,roles.FirstOrDefault())
+                        }),
+                        Expires = DateTime.UtcNow.AddDays(7),
+                        SigningCredentials = new(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                    };
+
+                    var token = tokenHandler.CreateToken(tokenDescriptor);
+
+                    return new UserDTO
+                    {
+                        Token = tokenHandler.WriteToken(token),
+                        User = _mapper.Map<UserDTO>(user),
+                        Role = roles.FirstOrDefault()
+                    };
                 }
 
 
 
             }catch(Exception ex)
             {
-
+                return new UserDTO();
             }
 
             return new UserDTO();
